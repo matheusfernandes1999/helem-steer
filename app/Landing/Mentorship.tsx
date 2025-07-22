@@ -32,7 +32,7 @@ export default function Mentoria() {
       {/* Bloco inferior */}
       <div className="grid md:grid-cols-2 gap-8 items-start">
         {/* Lista de benefícios */}
-        <div className='flex flex-col items-center pt-12 mx-8'>
+        <div className='flex flex-col items-center pt-12 mx-8 md:mb-0 mb-6'>
           <h3 className="text-2xl md:text-4xl font-semibold mb-6 text-center">
             Oportunidade <Span>única</Span>
           </h3>
@@ -46,7 +46,7 @@ export default function Mentoria() {
             ].map((item, index) => (
               <li
                 key={index}
-                className={`px-4 py-3 rounded-md text-sm font-medium bg-semantic-background-list hover:bg-primary-helem-500 duration-300 ease-linear transition-all`}
+                className={`px-8 py-3 rounded-md text-sm md:text-lg font-medium bg-semantic-background-list hover:bg-primary-helem-500 duration-300 ease-linear transition-all`}
               >
                 {item}
               </li>

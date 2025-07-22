@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export default function HelemProfile() {
   return (
-    <section className="bg-[#7725c431] flex flex-col md:flex-row items-center justify-center rounded-2xl text-white w-[75vw] min-h-max relative overflow-hidden">
+    <section className="bg-[#7725c431] flex flex-col md:flex-row items-center justify-center rounded-2xl text-white md:w-[85vw] w-[90vw] min-h-max relative overflow-hidden">
       {/* Desktop Image (absolute positioned) */}
       <div className="hidden md:block flex-shrink-0 self-end absolute left-0 bottom-0">
         <Image
@@ -22,7 +22,7 @@ export default function HelemProfile() {
           width={180}
           height={180}
         />
-        <h2 className="text-lg text-center font-semibold leading-snug text-gray-100">
+        <h2 className="text-lg text-center font-semibold leading-snug text-gray-100 mr-4">
           Uma trajetória <span className="text-purple-500">internacional</span>{" "}
           <br className="hidden md:block" />
           que vai <span className="text-purple-500">impulsionar a sua</span>

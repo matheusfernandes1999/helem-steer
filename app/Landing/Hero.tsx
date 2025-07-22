@@ -85,9 +85,9 @@ const staggerContainer: Variants = {
 
 export default function Hero() {
   return (
-    <section className="flex flex-col items-center justify-start w-screen px-12 pb-8">
+    <section className="flex flex-col items-center justify-start w-screen">
       {/* Desktop Layout */}
-      <div className="hidden md:flex flex-col items-center justify-center w-full flex-1">
+      <div className="hidden md:flex flex-col items-center justify-center w-full flex-1 px-12 py-4">
         {/* Main content row */}
         <motion.div 
           className="flex flex-row items-center justify-center w-full flex-1"
@@ -142,56 +142,44 @@ export default function Hero() {
       </div>
       
       {/* Mobile Layout */}
-      <motion.div 
-        className="flex md:hidden flex-col items-center justify-start w-full flex-1 space-y-6"
-        variants={staggerContainer}
-        initial="initial"
-        animate="animate"
-      >
-        {/* Title */}
-        <motion.div 
-          className="text-center hidden md:hidden lg:block"
-          variants={fadeInUp}
-        >
-          <Text type="title"><Span>Helem Steer</Span></Text>
-        </motion.div>
-        
-        {/* Image */}
-        <motion.div 
-          className="w-full max-w-sm max-h-[35%] sm:h-auto"
-          variants={scaleIn}
-          whileInView={{ 
-            scale: [1, 1.02, 1],
-            transition: { duration: 2, ease: "easeInOut", repeat: Infinity, repeatDelay: 3 }
-          }}
-        >
-          <Image priority src={"/images/mentora-helem.png"} alt="Helem com olhar sério e cativante." width={400} height={400} className="w-full h-auto" />
-        </motion.div>
-        
-        {/* Main subtitle text */}
-        <motion.div 
-          className="text-center w-screen"
-          variants={fadeInUp}
-        >
-          <Text type="subtitle">Descubra como <Span>transformar sua carreira</Span> com uma mentoria exclusiva</Text>
-        </motion.div>
-        
-        {/* Info text (full width below) */}
-        <motion.div 
-          className="w-screen px-4 text-center"
-          variants={fadeInUp}
-        >
-          <Text type="info" className="mt-2">Com 26 anos de experiência e 17 deles vividos na Inglaterra, Helem Steer <Span>ajudou centenas de professores</Span> a darem o próximo passo profissional com aulas de altíssimo nível.</Text>
-        </motion.div>
-        
-        {/* Button (always at bottom) */}
-        <motion.div 
-          className=""
-          variants={fadeInUp}
-        >
-          <Button text={<>Quero transformar <br className="hidden md:block" /> minha carreira agora</>}/>
-        </motion.div>
-      </motion.div>
+      <div className="w-fit px-6 pb-6 mx-auto flex md:hidden flex-col items-start">
+      <div className="flex flex-row w-full">
+        <div className="flex-1">
+          <h1 className="text-[#7310dc] text-[26px] font-semibold mb-2 leading-tight min-w-max">
+            Helem Steer
+          </h1>
+
+          <p className="text-base font-semibold leading-[17px] text-[#b3b3b3] mb-4">
+            Descubra como{" "}
+            <span className="text-[#7310dc]">transformar sua <br /> carreira</span> com uma mentoria exclusiva
+          </p>
+
+          <p className="text-[8px] font-semibold text-[#b3b3b3] opacity-75 leading-normal max-w-[90%]">
+            Com 26 anos de experiência e 17 deles vividos na Inglaterra,{" "}
+            <span className="text-[#7310dc]">Helem Steer ajudou <br /> centenas de professores</span> a darem o próximo passo
+            profissional com aulas de <br />
+            altíssimo nível.
+          </p>
+        </div>
+
+        <div className="flex-shrink-0 ml-auto">
+          <Image
+            src={"/images/mentora-helem.png"}
+            alt="Mentoria image"
+            width={177}
+            height={265}
+            className="object-cover"
+            priority
+          />
+        </div>
+      </div>
+
+      <div className="mt-4 w-full flex justify-center">
+        <button className="bg-[#7310dc] text-[#e2e2e2] text-[8px] font-bold py-2 px-4 rounded-lg w-[120px] h-9 text-center">
+          Quero transformar minha carreira agora
+        </button>
+      </div>
+    </div>
     </section>
   );
 }

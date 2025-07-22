@@ -1,15 +1,130 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 import Text from './Text';
 import Span from './TextGradient';
 
 const menuItems = ["Início", "Sobre", "Formação", "Depoimentos", "Contato"];
 
+// Variantes de animação para o container do menu desktop
+const desktopNavVariants = {
+  initial: { opacity: 0, y: -20 },
+  animate: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.8,
+      ease: "easeInOut", // Fixed: use valid easing
+      staggerChildren: 0.1,
+      delayChildren: 0.2
+    }
+  }
+};
+
+// Variantes para itens individuais do menu desktop
+const desktopItemVariants = {
+  initial: { opacity: 0, y: -15 },
+  animate: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.6,
+      ease: "easeOut" // Fixed: use valid easing
+    }
+  }
+};
+
+// Variantes para o menu mobile
+const mobileMenuVariants = {
+  initial: {
+    x: "100%",
+    opacity: 0
+  },
+  animate: {
+    x: 0,
+    opacity: 1,
+    transition: {
+      type: "spring" as const,
+      stiffness: 300,
+      damping: 30,
+      staggerChildren: 0.08,
+      delayChildren: 0.1
+    }
+  },
+  exit: {
+    x: "100%",
+    opacity: 0,
+    transition: {
+      type: "spring" as const,
+      stiffness: 400,
+      damping: 40,
+      staggerChildren: 0.05,
+      staggerDirection: -1
+    }
+  }
+};
+
+// Variantes para itens do menu mobile
+const mobileItemVariants = {
+  initial: {
+    x: 50,
+    opacity: 0
+  },
+  animate: {
+    x: 0,
+    opacity: 1,
+    transition: {
+      type: "spring" as const,
+      stiffness: 300,
+      damping: 25
+    }
+  },
+  exit: {
+    x: 30,
+    opacity: 0,
+    transition: {
+      duration: 0.2
+    }
+  }
+};
+
+// Variantes para o overlay
+const overlayVariants = {
+  initial: { opacity: 0 },
+  animate: {
+    opacity: 1,
+    transition: { duration: 0.4, ease: "easeOut" as const }
+  },
+  exit: {
+    opacity: 0,
+    transition: { duration: 0.3, ease: "easeIn" as const }
+  }
+};
+
+// Variantes para o botão hamburger
+const hamburgerVariants = {
+  initial: { opacity: 0, scale: 0.8, rotate: -180 },
+  animate: {
+    opacity: 1,
+    scale: 1,
+    rotate: 0,
+    transition: {
+      duration: 1,
+      ease: [0.42, 0, 0.58, 1], // Use a valid cubic bezier easing array
+      delay: 0.3
+    }
+  }
+};
+
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  
+  // Hook para scroll parallax (opcional)
+  const { scrollY } = useScroll();
+  const headerY = useTransform(scrollY, [0, 200], [0, -20]);
+  const headerOpacity = useTransform(scrollY, [0, 100], [1, 0.95]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -63,17 +178,21 @@ const Header: React.FC = () => {
   return (
     <>
       <motion.header 
-        className="bg-semantic-background-primary py-4"
-       
-        initial="initial"
-        animate="animate"
+        className="bg-semantic-background-primary pt-0 md:pt-4 relative z-30"
+        style={{ 
+          y: headerY,
+          opacity: headerOpacity 
+        }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5 }}
       >
         <div className="max-w-screen-xl mx-auto px-4">
           {/* Desktop Navigation */}
           {!isMobile && (
             <motion.nav 
               className="flex flex-row gap-40 w-full justify-around"
-              
+              variants={desktopNavVariants}
               initial="initial"
               animate="animate"
             >
@@ -82,13 +201,37 @@ const Header: React.FC = () => {
                   key={index}
                   href="#"
                   className="text-text-primary text-lg font-semibold hover:text-text-hover transition-colors duration-300 relative group"
+                  variants={desktopItemVariants}
                   whileHover={{ 
-                    y: -2, 
-                    transition: { duration: 0.3, ease: "easeOut" }
+                    y: -3, 
+                    scale: 1.05,
+                    transition: { 
+                      type: "spring", 
+                      stiffness: 400, 
+                      damping: 10 
+                    }
+                  }}
+                  whileTap={{ 
+                    scale: 0.95,
+                    y: 0,
+                    transition: { duration: 0.1 }
                   }}
                 >
-                  {item}
-                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-text-hover transition-all duration-300 group-hover:w-full"></span>
+                  <motion.span
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.5 + (index * 0.1) }}
+                  >
+                    {item}
+                  </motion.span>
+                  <motion.span 
+                    className="absolute bottom-0 left-0 h-0.5 bg-text-hover"
+                    initial={{ width: 0 }}
+                    whileHover={{ 
+                      width: "100%",
+                      transition: { duration: 0.3, ease: "easeOut" }
+                    }}
+                  />
                 </motion.a>
               ))}
             </motion.nav>
@@ -98,71 +241,85 @@ const Header: React.FC = () => {
           {isMobile && (
             <motion.div 
               className="flex justify-between items-center w-screen px-2"
-              
-              initial="initial"
-              animate="animate"
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
             >
-              {/* Empty div for left spacing */}
-              <div className="w-10"></div>
-              
-              {/* Centered Title */}
+              {/* Logo/Brand Space */}
               <motion.div 
-                className="flex-1 flex justify-center"
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ 
-                  opacity: 1, 
-                  scale: 1,
-                  transition: { 
-                    duration: 0.8, 
-                    delay: 0.2,
-                    ease: [0.25, 0.1, 0.25, 1.0]
-                  }
-                }}
-              >
-                <Text type='subtitle'>
-                  <Span>Helem Steer</Span>
-                </Text>
-              </motion.div>
+                className="w-10"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.4, duration: 0.5, ease: "easeOut" }}
+              />
               
               {/* Menu Button */}
               <motion.button
                 onClick={toggleMenu}
                 className="hamburger-button text-primary-helem-500 p-2 rounded-md transition-all duration-200 hover:bg-gray-800 hover:bg-opacity-50"
                 aria-label="Toggle menu"
-                initial={{ opacity: 0, rotate: -90 }}
-                animate={{ 
-                  opacity: 1, 
-                  rotate: 0,
+                variants={hamburgerVariants}
+                initial="initial"
+                animate="animate"
+                whileHover={{ 
+                  scale: 1.1,
+                  rotate: 5,
                   transition: { 
-                    duration: 0.8, 
-                    delay: 0.3,
-                    ease: [0.25, 0.1, 0.25, 1.0]
+                    type: "spring",
+                    stiffness: 400,
+                    damping: 10
                   }
                 }}
-                whileHover={{ 
-                  scale: 1.05, 
-                  transition: { duration: 0.2 }
+                whileTap={{ 
+                  scale: 0.9,
+                  rotate: -5,
+                  transition: { duration: 0.1 }
                 }}
-                whileTap={{ scale: 0.95 }}
               >
                 <AnimatePresence mode="wait">
                   {isMenuOpen ? (
                     <motion.div
                       key="close"
-                      initial={{ rotate: -90, opacity: 0 }}
-                      animate={{ rotate: 0, opacity: 1 }}
-                      exit={{ rotate: 90, opacity: 0 }}
-                      transition={{ duration: 0.3, ease: "easeInOut" }}
+                      initial={{ rotate: -180, opacity: 0, scale: 0.8 }}
+                      animate={{ 
+                        rotate: 0, 
+                        opacity: 1, 
+                        scale: 1,
+                        transition: {
+                          type: "spring",
+                          stiffness: 300,
+                          damping: 20
+                        }
+                      }}
+                      exit={{ 
+                        rotate: 180, 
+                        opacity: 0, 
+                        scale: 0.8,
+                        transition: { duration: 0.2 }
+                      }}
                     >
                       <X size={32} />
                     </motion.div>
                   ) : (
                     <motion.div
                       key="menu"
-                      initial={{ rotate: 90, opacity: 0 }}
-                      animate={{ rotate: 0, opacity: 1 }}
-                      exit={{ rotate: -90, opacity: 0 }}
-                      transition={{ duration: 0.3, ease: "easeInOut" }}
+                      initial={{ rotate: 180, opacity: 0, scale: 0.8 }}
+                      animate={{ 
+                        rotate: 0, 
+                        opacity: 1, 
+                        scale: 1,
+                        transition: {
+                          type: "spring",
+                          stiffness: 300,
+                          damping: 20
+                        }
+                      }}
+                      exit={{ 
+                        rotate: -180, 
+                        opacity: 0, 
+                        scale: 0.8,
+                        transition: { duration: 0.2 }
+                      }}
                     >
                       <Menu size={32} />
                     </motion.div>
@@ -177,34 +334,51 @@ const Header: React.FC = () => {
       {/* Mobile Menu Overlay */}
       <AnimatePresence>
         {isMobile && isMenuOpen && (
-          <motion.div
-            className="fixed inset-0 z-40 bg-black bg-opacity-30"
-            initial="initial"
-            animate="animate"
-            exit="exit"
-          >
+          <>
+            {/* Background Overlay */}
+            <motion.div
+              className="fixed inset-0 z-40 bg-black"
+              variants={overlayVariants}
+              initial="initial"
+              animate="animate"
+              exit="exit"
+              onClick={() => setIsMenuOpen(false)}
+            />
+
             {/* Mobile Menu */}
             <motion.div
-              className="mobile-menu fixed top-0 right-0 h-full w-80 max-w-[85vw] bg-semantic-background-primary shadow-xl"
+              className="mobile-menu fixed top-0 right-0 h-full w-80 max-w-[85vw] bg-semantic-background-primary shadow-xl z-50"
+              variants={mobileMenuVariants}
               initial="initial"
               animate="animate"
               exit="exit"
             >
               {/* Menu Header */}
               <motion.div 
-                className="flex justify-between items-center p-6"
-                initial={{ opacity: 0, y: -20 }}
+                className="flex justify-between items-center p-6 border-b border-primary-helem-400"
+                initial={{ opacity: 0, y: -10 }}
                 animate={{ 
                   opacity: 1, 
                   y: 0,
                   transition: { 
-                    duration: 0.6, 
-                    delay: 0.3,
-                    ease: [0.25, 0.1, 0.25, 1.0]
+                    delay: 0.2,
+                    duration: 0.5,
+                    ease: "easeOut"
                   }
                 }}
               >
-                <h2 className="text-white text-xl font-semibold">Helem Steer</h2>
+                <motion.h2 
+                  className="text-white text-xl font-semibold"
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ 
+                    opacity: 1, 
+                    x: 0,
+                    transition: { delay: 0.3, duration: 0.5 }
+                  }}
+                >
+                  Helem Steer
+                </motion.h2>
+                
                 <motion.button
                   onClick={toggleMenu}
                   className="text-white p-2 rounded-md transition-all duration-200 hover:bg-primary-helem-500 hover:bg-opacity-50"
@@ -212,42 +386,80 @@ const Header: React.FC = () => {
                   whileHover={{ 
                     rotate: 90,
                     scale: 1.1,
-                    transition: { duration: 0.3 }
+                    transition: { 
+                      type: "spring",
+                      stiffness: 300,
+                      damping: 20
+                    }
                   }}
-                  whileTap={{ scale: 0.9 }}
+                  whileTap={{ 
+                    scale: 0.9,
+                    rotate: 180,
+                    transition: { duration: 0.1 }
+                  }}
                 >
                   <X size={24} />
                 </motion.button>
               </motion.div>
 
               {/* Menu Items */}
-              <motion.nav 
-                className="py-6"
-                initial="initial"
-                animate="animate"
-              >
+              <motion.nav className="py-6">
                 {menuItems.map((item, index) => (
                   <motion.a
                     key={index}
                     href="#"
                     onClick={handleMenuItemClick}
-                    className="block px-6 py-4 text-white text-lg font-medium hover:bg-primary-helem-500 hover:bg-opacity-50 transition-all duration-200 border-b border-primary-helem-400 last:border-b-0 group"
+                    className="block px-6 py-4 text-white text-lg font-medium hover:bg-primary-helem-500 hover:bg-opacity-50 transition-all duration-200 border-b border-primary-helem-400 border-opacity-30 last:border-b-0 group relative overflow-hidden"
+                    variants={mobileItemVariants}
                     whileHover={{ 
-                      x: 8,
-                      backgroundColor: "rgba(var(--primary-helem-500), 0.1)",
-                      transition: { duration: 0.3, ease: "easeOut" }
+                      x: 12,
+                      backgroundColor: "rgba(var(--primary-helem-500), 0.15)",
+                      transition: { 
+                        type: "spring",
+                        stiffness: 300,
+                        damping: 20
+                      }
                     }}
-                    whileTap={{ scale: 0.98 }}
+                    whileTap={{ 
+                      scale: 0.98,
+                      x: 8,
+                      transition: { duration: 0.1 }
+                    }}
                   >
-                    <span className="relative">
+                    <motion.span 
+                      className="relative z-10"
+                      initial={{ opacity: 0 }}
+                      animate={{ 
+                        opacity: 1,
+                        transition: { delay: 0.3 + (index * 0.05) }
+                      }}
+                    >
                       {item}
-                      <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-white transition-all duration-300 group-hover:w-full"></span>
-                    </span>
+                    </motion.span>
+                    
+                    {/* Hover effect background */}
+                    <motion.div
+                      className="absolute inset-0 bg-gradient-to-r from-primary-helem-500 to-primary-helem-400 opacity-0"
+                      whileHover={{
+                        opacity: 0.1,
+                        transition: { duration: 0.3 }
+                      }}
+                    />
+                    
+                    {/* Animated underline */}
+                    <motion.span 
+                      className="absolute bottom-0 left-6 right-6 h-0.5 bg-white"
+                      initial={{ scaleX: 0, originX: 0 }}
+                      whileHover={{ 
+                        scaleX: 1,
+                        transition: { duration: 0.3, ease: "easeOut" }
+                      }}
+                    />
                   </motion.a>
                 ))}
               </motion.nav>
 
-              {/* Additional Content */}
+              {/* Footer */}
               <motion.div 
                 className="absolute bottom-6 left-6 right-6"
                 initial={{ opacity: 0, y: 20 }}
@@ -255,18 +467,24 @@ const Header: React.FC = () => {
                   opacity: 1, 
                   y: 0,
                   transition: { 
-                    duration: 0.8, 
+                    duration: 0.6, 
                     delay: 0.8,
-                    ease: [0.25, 0.1, 0.25, 1.0]
+                    ease: "easeOut"
                   }
                 }}
               >
-                <div className="text-gray-400 text-sm text-center">
+                <motion.div 
+                  className="text-gray-400 text-sm text-center"
+                  whileHover={{
+                    color: "#ffffff",
+                    transition: { duration: 0.3 }
+                  }}
+                >
                   © {new Date().getFullYear()} Helem Steer
-                </div>
+                </motion.div>
               </motion.div>
             </motion.div>
-          </motion.div>
+          </>
         )}
       </AnimatePresence>
     </>
