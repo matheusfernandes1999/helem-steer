@@ -1,21 +1,21 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
-import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
+import { motion, AnimatePresence, useScroll, useTransform, Variants } from 'framer-motion';
 import Text from './Text';
 import Span from './TextGradient';
 
 const menuItems = ["Início", "Sobre", "Formação", "Depoimentos", "Contato"];
 
 // Variantes de animação para o container do menu desktop
-const desktopNavVariants = {
+const desktopNavVariants: Variants = {
   initial: { opacity: 0, y: -20 },
   animate: {
     opacity: 1,
     y: 0,
     transition: {
       duration: 0.8,
-      ease: "easeInOut", // Fixed: use valid easing
+      ease: [0.4, 0, 0.2, 1], // Custom cubic bezier easing
       staggerChildren: 0.1,
       delayChildren: 0.2
     }
@@ -23,20 +23,20 @@ const desktopNavVariants = {
 };
 
 // Variantes para itens individuais do menu desktop
-const desktopItemVariants = {
+const desktopItemVariants: Variants = {
   initial: { opacity: 0, y: -15 },
   animate: {
     opacity: 1,
     y: 0,
     transition: {
       duration: 0.6,
-      ease: "easeOut" // Fixed: use valid easing
+      ease: [0.25, 0.46, 0.45, 0.94] // Custom cubic bezier easing
     }
   }
 };
 
 // Variantes para o menu mobile
-const mobileMenuVariants = {
+const mobileMenuVariants: Variants = {
   initial: {
     x: "100%",
     opacity: 0
@@ -45,7 +45,7 @@ const mobileMenuVariants = {
     x: 0,
     opacity: 1,
     transition: {
-      type: "spring" as const,
+      type: "spring",
       stiffness: 300,
       damping: 30,
       staggerChildren: 0.08,
@@ -56,7 +56,7 @@ const mobileMenuVariants = {
     x: "100%",
     opacity: 0,
     transition: {
-      type: "spring" as const,
+      type: "spring",
       stiffness: 400,
       damping: 40,
       staggerChildren: 0.05,
@@ -66,7 +66,7 @@ const mobileMenuVariants = {
 };
 
 // Variantes para itens do menu mobile
-const mobileItemVariants = {
+const mobileItemVariants: Variants = {
   initial: {
     x: 50,
     opacity: 0
@@ -75,7 +75,7 @@ const mobileItemVariants = {
     x: 0,
     opacity: 1,
     transition: {
-      type: "spring" as const,
+      type: "spring",
       stiffness: 300,
       damping: 25
     }
@@ -90,20 +90,20 @@ const mobileItemVariants = {
 };
 
 // Variantes para o overlay
-const overlayVariants = {
+const overlayVariants: Variants = {
   initial: { opacity: 0 },
   animate: {
     opacity: 1,
-    transition: { duration: 0.4, ease: "easeOut" as const }
+    transition: { duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }
   },
   exit: {
     opacity: 0,
-    transition: { duration: 0.3, ease: "easeIn" as const }
+    transition: { duration: 0.3, ease: [0.55, 0.06, 0.68, 0.19] }
   }
 };
 
 // Variantes para o botão hamburger
-const hamburgerVariants = {
+const hamburgerVariants: Variants = {
   initial: { opacity: 0, scale: 0.8, rotate: -180 },
   animate: {
     opacity: 1,
@@ -111,7 +111,7 @@ const hamburgerVariants = {
     rotate: 0,
     transition: {
       duration: 1,
-      ease: [0.42, 0, 0.58, 1], // Use a valid cubic bezier easing array
+      ease: [0.42, 0, 0.58, 1],
       delay: 0.3
     }
   }
@@ -229,7 +229,7 @@ const Header: React.FC = () => {
                     initial={{ width: 0 }}
                     whileHover={{ 
                       width: "100%",
-                      transition: { duration: 0.3, ease: "easeOut" }
+                      transition: { duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }
                     }}
                   />
                 </motion.a>
@@ -243,14 +243,14 @@ const Header: React.FC = () => {
               className="flex justify-between items-center w-screen px-2"
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
+              transition={{ duration: 0.6, delay: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}
             >
               {/* Logo/Brand Space */}
               <motion.div 
                 className="w-10"
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.4, duration: 0.5, ease: "easeOut" }}
+                transition={{ delay: 0.4, duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
               />
               
               {/* Menu Button */}
@@ -363,7 +363,7 @@ const Header: React.FC = () => {
                   transition: { 
                     delay: 0.2,
                     duration: 0.5,
-                    ease: "easeOut"
+                    ease: [0.25, 0.46, 0.45, 0.94]
                   }
                 }}
               >
@@ -452,7 +452,7 @@ const Header: React.FC = () => {
                       initial={{ scaleX: 0, originX: 0 }}
                       whileHover={{ 
                         scaleX: 1,
-                        transition: { duration: 0.3, ease: "easeOut" }
+                        transition: { duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }
                       }}
                     />
                   </motion.a>
@@ -469,7 +469,7 @@ const Header: React.FC = () => {
                   transition: { 
                     duration: 0.6, 
                     delay: 0.8,
-                    ease: "easeOut"
+                    ease: [0.25, 0.46, 0.45, 0.94]
                   }
                 }}
               >
