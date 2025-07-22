@@ -19,11 +19,10 @@ export default function HelemProfile() {
         <Image
           src="/images/sorrindo-helem.png"
           alt="Helem Steer"
-          width={200}
-          height={200}
-          className="rounded-xl"
+          width={180}
+          height={180}
         />
-        <h2 className="text-2xl text-center font-semibold leading-snug text-gray-100">
+        <h2 className="text-lg text-center font-semibold leading-snug text-gray-100">
           Uma trajetória <span className="text-purple-500">internacional</span>{" "}
           <br className="hidden md:block" />
           que vai <span className="text-purple-500">impulsionar a sua</span>

@@ -18,8 +18,8 @@ const typeStyles: Record<TextType, string> = {
 
 const defaultSizes: Record<TextType, string> = {
   title: 'text-7xl md:text-7xl',
-  subtitle: 'text-4xl md:text-6xl',
-  info: 'text-xl'
+  subtitle: 'text-3xl md:text-6xl mx-2',
+  info: 'text-xl mx-2'
 };
 
 const Text: React.FC<TextProps> = ({

@@ -10,7 +10,7 @@ export default function Footer() {
         um profissional de <Span>referência?</Span>
       </Text>
 
-      <Text type="info" className="max-w-[60%] text-primary-helem-500">
+      <Text type="info" className="max-w-[60%] text-primary-helem-500 opacity-75">
         Chegou a hora de dar o próximo passo. Com a orientação certa, você pode
         ensinar com confiança, conquistar alunos de alto padrão e viver com
         liberdade por meio do ensino de idiomas.

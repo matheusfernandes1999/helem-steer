@@ -7,6 +7,10 @@ import { useRef } from "react";
 type ImageCardProps = {
   src: string;
   alt: string;
+  text: {
+    line1: string;
+    line2: string;
+  };
   position?: "top-left" | "top-right" | "bottom-right";
 };
 
@@ -19,6 +23,7 @@ const overlayPosition = {
 const ImageCard: React.FC<ImageCardProps> = ({
   src,
   alt,
+  text,
   position = "top-left",
 }) => {
   const ref = useRef<HTMLDivElement>(null);
@@ -57,8 +62,8 @@ const ImageCard: React.FC<ImageCardProps> = ({
       <div
         className={`absolute ${overlayPosition[position]} z-20 text-white text-lg sm:text-xl font-bold leading-tight drop-shadow-md`}
       >
-        <p>MA TESOL</p>
-        <p>University of Brighton</p>
+        <p>{text.line1}</p>
+        <p>{text.line2}</p>
       </div>
     </motion.div>
   );
@@ -71,11 +76,19 @@ export const BrightonShowcase: React.FC = () => {
         <ImageCard
           src="/images/university-1.png"
           alt="Campus 1"
+          text={{
+            line1: "MA TESOL",
+            line2: "University of Brighton"
+          }}
           position="top-left"
         />
         <ImageCard
           src="/images/university-2.png"
           alt="Campus 2"
+          text={{
+            line1: "East Sussex College",
+            line2: ""
+          }}
           position="top-left"
         />
       </div>
@@ -83,7 +96,11 @@ export const BrightonShowcase: React.FC = () => {
         <ImageCard
           src="/images/university-3.png"
           alt="Campus 3"
-          position="top-right"
+          text={{
+            line1: "University of Brighton",
+            line2: ""
+          }}
+          position="top-left"
         />
       </div>
     </div>
