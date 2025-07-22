@@ -3,10 +3,10 @@ import Image from "next/image";
 import Text from "../Components/Text";
 import Span from "../Components/TextGradient";
 import Button from "../Components/Button";
-import { motion } from "framer-motion";
+import { motion, Variants } from "framer-motion";
 
 // Animation variants with smooth, elegant timing
-const fadeInUp = {
+const fadeInUp: Variants = {
   initial: { opacity: 0, y: 40, filter: "blur(4px)" },
   animate: { 
     opacity: 1, 
@@ -22,7 +22,7 @@ const fadeInUp = {
   }
 };
 
-const fadeInLeft = {
+const fadeInLeft: Variants = {
   initial: { opacity: 0, x: -50, filter: "blur(2px)" },
   animate: { 
     opacity: 1, 
@@ -38,7 +38,7 @@ const fadeInLeft = {
   }
 };
 
-const fadeInRight = {
+const fadeInRight: Variants = {
   initial: { opacity: 0, x: 50, scale: 0.95, filter: "blur(2px)" },
   animate: { 
     opacity: 1, 
@@ -56,7 +56,7 @@ const fadeInRight = {
   }
 };
 
-const scaleIn = {
+const scaleIn: Variants = {
   initial: { opacity: 0, scale: 0.9, y: 20, filter: "blur(3px)" },
   animate: { 
     opacity: 1, 
@@ -74,7 +74,7 @@ const scaleIn = {
   }
 };
 
-const staggerContainer = {
+const staggerContainer: Variants = {
   animate: {
     transition: {
       staggerChildren: 0.15,
